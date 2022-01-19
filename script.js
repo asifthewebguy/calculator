@@ -27,7 +27,7 @@ operator.forEach(element => {
                 clean();
                 break;
             case "=":
-                console.log("calculating...");
+                calculate();
                 break;
             default:
                 operate(operation);
@@ -63,7 +63,88 @@ function operate(operator) {
         calcObj.pop();
         calcObj.push(operator);
     }
-    console.log(calcObj);
+    // console.log(calcObj);
     display.innerHTML = "0";
+}
+// operations
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function devition(a, b) {
+    return a / b;
+}
+
+function calculate() {
+    let calcArray = calcObj;
+    let cDisplay = display.innerHTML;
+    let output = 0;
+    if (cDisplay === "0") {
+        if (typeof calcArray[-1] == "string") {
+            calcArray.pop();
+        }
+    } else {
+        if (cDisplay.includes(".")) {
+            calcArray.push(parseFloat(cDisplay));
+            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay;
+            display.innerHTML = "0";
+        } else {
+            calcArray.push(parseInt(cDisplay));
+            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay;
+            display.innerHTML = "0";
+        }
+    }
+    console.log(calcArray);
+    // for (let i = 0; i < calcArray.length; i++) {
+    //     let p = 0;
+    //     let c = calcArray[i];
+    //     if (c == "+" || c == "-" || c == "+" ) {
+
+    //     }
+    // }
+    let cal = true;
+    while (cal) {
+        if (calcArray.includes("×")) {
+            let index = calcArray.indexOf("×");
+            let p = calcArray[index - 1];
+            let n = calcArray[index + 1];
+            let o = multiply(p, n);
+            calcArray.splice(index - 1, 3, o);
+        } else if (calcArray.includes("÷")) {
+            let index = calcArray.indexOf("÷");
+            let p = calcArray[index - 1];
+            let n = calcArray[index + 1];
+            let o = devition(p, n);
+            calcArray.splice(index - 1, 3, o);
+        } else if (calcArray.includes("+")) {
+            let index = calcArray.indexOf("+");
+            let p = calcArray[index - 1];
+            let n = calcArray[index + 1];
+            let o = add(p, n);
+            calcArray.splice(index - 1, 3, o);
+        } else {
+            let index = calcArray.indexOf("-");
+            let p = calcArray[index - 1];
+            let n = calcArray[index + 1];
+            let o = subtract(p, n);
+            calcArray.splice(index - 1, 3, o);
+        }
+
+
+        let array = calcArray.length;
+        if (array === 1) {
+            output = calcArray[0];
+            display.innerHTML = output;
+            cal = false;
+        }
+    }
 }
 // console.log(digits);
