@@ -22,9 +22,13 @@ digits.forEach(element => {
 operator.forEach(element => {
     element.addEventListener("click", () => {
         let operation = element.textContent;
+        console.log(operation);
         switch (operation) {
             case "AC":
                 clean();
+                break;
+            case "⇐":
+                console.log("Backspace---");
                 break;
             case "=":
                 calculate();
@@ -43,28 +47,31 @@ function clean() {
 }
 
 function operate(operator) {
-    let number = display.innerHTML;
-    if (number != "0") {
-        if (number.includes(".")) {
-            calcObj.push(parseFloat(number));
+    if (calcObj.length > 0) {
+        console.log(calcObj.length);
+        let number = display.innerHTML;
+        if (number != "0") {
+            if (number.includes(".")) {
+                calcObj.push(parseFloat(number));
+            } else {
+                calcObj.push(parseInt(number));
+            }
+            calcObj.push(operator);
+            if (calcDisplay.innerHTML === "0") {
+                calcDisplay.innerHTML = number + ' ' + operator;
+            } else {
+                calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + number + ' ' + operator;
+            }
         } else {
-            calcObj.push(parseInt(number));
+            let pCD = calcDisplay.innerHTML.split("");
+            pCD.pop();
+            calcDisplay.innerHTML = pCD.join("") + operator;
+            calcObj.pop();
+            calcObj.push(operator);
         }
-        calcObj.push(operator);
-        if (calcDisplay.innerHTML === "0") {
-            calcDisplay.innerHTML = number + ' ' + operator;
-        } else {
-            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + number + ' ' + operator;
-        }
-    } else {
-        let pCD = calcDisplay.innerHTML.split("");
-        pCD.pop();
-        calcDisplay.innerHTML = pCD.join("") + operator;
-        calcObj.pop();
-        calcObj.push(operator);
+        // console.log(calcObj);
+        display.innerHTML = "0";
     }
-    // console.log(calcObj);
-    display.innerHTML = "0";
 }
 // operations
 function add(a, b) {
@@ -84,6 +91,7 @@ function devition(a, b) {
 }
 
 function calculate() {
+
     let calcArray = calcObj;
     let cDisplay = display.innerHTML;
     let output = 0;
@@ -94,22 +102,15 @@ function calculate() {
     } else {
         if (cDisplay.includes(".")) {
             calcArray.push(parseFloat(cDisplay));
-            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay;
+            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
             display.innerHTML = "0";
         } else {
             calcArray.push(parseInt(cDisplay));
-            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay;
+            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
             display.innerHTML = "0";
         }
     }
-    console.log(calcArray);
-    // for (let i = 0; i < calcArray.length; i++) {
-    //     let p = 0;
-    //     let c = calcArray[i];
-    //     if (c == "+" || c == "-" || c == "+" ) {
 
-    //     }
-    // }
     let cal = true;
     while (cal) {
         if (calcArray.includes("×")) {
