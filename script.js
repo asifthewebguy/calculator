@@ -3,8 +3,15 @@ const display = document.getElementById("display");
 const digits = document.querySelectorAll(".digit");
 const operator = document.querySelectorAll(".operator");
 let calcObj = [];
+
 digits.forEach(element => {
     element.addEventListener("click", () => {
+        let cdis = calcDisplay.innerHTML;
+        if (cdis[cdis.length - 1] === "=") {
+            console.log(cdis[cdis.length - 1]);
+            calcDisplay.innerHTML = "0";
+            display.innerHTML = "0";
+        }
         let olddisplay = display.textContent;
         let number = element.textContent;
         if (olddisplay === "0" && number != ".") {
@@ -19,6 +26,7 @@ digits.forEach(element => {
         }
     });
 });
+
 operator.forEach(element => {
     element.addEventListener("click", () => {
         let operation = element.textContent;
@@ -28,7 +36,7 @@ operator.forEach(element => {
                 clean();
                 break;
             case "⇐":
-                console.log("Backspace---");
+                back();
                 break;
             case "=":
                 calculate();
@@ -39,13 +47,27 @@ operator.forEach(element => {
         }
     });
 });
-
+// all clear function
 function clean() {
     calcObj = [];
     display.innerHTML = "0";
     calcDisplay.innerHTML = "0";
 }
+// back button function
+function back() {
+    let d = (display.innerHTML).split("");
+    if (d.length >= 1 && d[0] != 0) {
+        d.pop();
+        let output = d.join("");
+        if (output === "") {
+            display.innerHTML = "0";
+        } else {
+            display.innerHTML = output;
+        }
 
+    }
+}
+// add to calculation object function
 function addtoCalculationObject(num, operator, obj = calcObj) {
     if (num.includes(".")) {
         obj.push(parseFloat(num));
@@ -56,7 +78,7 @@ function addtoCalculationObject(num, operator, obj = calcObj) {
         obj.push(operator);
     }
 }
-
+// update calculation display function
 function updateCalculationDisplay(num, operator) {
     if (calcDisplay.innerHTML === "0") {
         calcDisplay.innerHTML = num + ' ' + operator;
@@ -64,7 +86,9 @@ function updateCalculationDisplay(num, operator) {
         calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + num + ' ' + operator;
     }
 }
-
+// operate function
+// this function is called 
+// when an operator(+, -,×,÷) button is pressed
 function operate(operator) {
     let number = display.innerHTML;
     if (calcObj.length > 0) {
@@ -104,7 +128,7 @@ function multiply(a, b) {
 function devition(a, b) {
     return a / b;
 }
-
+// this function is called when equalto operator(=) is pressed 
 function calculate() {
     let calcArray = calcObj;
     let cDisplay = display.innerHTML;
