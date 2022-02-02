@@ -46,22 +46,31 @@ function clean() {
     calcDisplay.innerHTML = "0";
 }
 
+function addtoCalculationObject(num, operator, obj = calcObj) {
+    if (num.includes(".")) {
+        obj.push(parseFloat(num));
+    } else {
+        obj.push(parseInt(num));
+    }
+    if (operator != "=") {
+        obj.push(operator);
+    }
+}
+
+function updateCalculationDisplay(num, operator) {
+    if (calcDisplay.innerHTML === "0") {
+        calcDisplay.innerHTML = num + ' ' + operator;
+    } else {
+        calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + num + ' ' + operator;
+    }
+}
+
 function operate(operator) {
+    let number = display.innerHTML;
     if (calcObj.length > 0) {
-        console.log(calcObj.length);
-        let number = display.innerHTML;
         if (number != "0") {
-            if (number.includes(".")) {
-                calcObj.push(parseFloat(number));
-            } else {
-                calcObj.push(parseInt(number));
-            }
-            calcObj.push(operator);
-            if (calcDisplay.innerHTML === "0") {
-                calcDisplay.innerHTML = number + ' ' + operator;
-            } else {
-                calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + number + ' ' + operator;
-            }
+            addtoCalculationObject(number, operator);
+            updateCalculationDisplay(number, operator);
         } else {
             let pCD = calcDisplay.innerHTML.split("");
             pCD.pop();
@@ -69,10 +78,16 @@ function operate(operator) {
             calcObj.pop();
             calcObj.push(operator);
         }
-        // console.log(calcObj);
-        display.innerHTML = "0";
+    } else {
+        if (number != "0") {
+            addtoCalculationObject(number, operator);
+            updateCalculationDisplay(number, operator);
+        }
     }
+    console.log(calcObj);
+    display.innerHTML = "0";
 }
+
 // operations
 function add(a, b) {
     return a + b;
@@ -91,24 +106,28 @@ function devition(a, b) {
 }
 
 function calculate() {
-
     let calcArray = calcObj;
     let cDisplay = display.innerHTML;
     let output = 0;
+
     if (cDisplay === "0") {
-        if (typeof calcArray[-1] == "string") {
+        if (isNaN(calcArray[calcArray.length - 1])) {
             calcArray.pop();
         }
     } else {
-        if (cDisplay.includes(".")) {
-            calcArray.push(parseFloat(cDisplay));
-            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
-            display.innerHTML = "0";
-        } else {
-            calcArray.push(parseInt(cDisplay));
-            calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
-            display.innerHTML = "0";
-        }
+        // if (cDisplay.includes(".")) {
+        //     calcArray.push(parseFloat(cDisplay));
+        //     calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
+        //     display.innerHTML = "0";
+        // } else {
+        //     calcArray.push(parseInt(cDisplay));
+        //     calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
+        //     display.innerHTML = "0";
+        // }
+        addtoCalculationObject(cDisplay, "=", calcArray);
+        updateCalculationDisplay(cDisplay, "=");
+        display.innerHTML = "0";
+        console.log(calcArray);
     }
 
     let cal = true;
