@@ -110,26 +110,18 @@ function calculate() {
     let cDisplay = display.innerHTML;
     let output = 0;
 
+    // preparing calculation object as calcArray
     if (cDisplay === "0") {
         if (isNaN(calcArray[calcArray.length - 1])) {
             calcArray.pop();
         }
     } else {
-        // if (cDisplay.includes(".")) {
-        //     calcArray.push(parseFloat(cDisplay));
-        //     calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
-        //     display.innerHTML = "0";
-        // } else {
-        //     calcArray.push(parseInt(cDisplay));
-        //     calcDisplay.innerHTML = calcDisplay.innerHTML + ' ' + cDisplay + ' = ';
-        //     display.innerHTML = "0";
-        // }
         addtoCalculationObject(cDisplay, "=", calcArray);
         updateCalculationDisplay(cDisplay, "=");
         display.innerHTML = "0";
-        console.log(calcArray);
     }
 
+    // coing calculation according to BODMAS
     let cal = true;
     while (cal) {
         if (calcArray.includes("×")) {
@@ -158,13 +150,11 @@ function calculate() {
             calcArray.splice(index - 1, 3, o);
         }
 
-
-        let array = calcArray.length;
-        if (array === 1) {
+        if (calcArray.length === 1) {
+            calcObj = [];
             output = calcArray[0];
             display.innerHTML = output;
             cal = false;
         }
     }
 }
-// console.log(digits);
